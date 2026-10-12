@@ -235,10 +235,35 @@
             .hero h1 { font-size: 1.8rem; }
             nav ul { display: none; }
         }
+
+        body {
+    background-color: transparent !important; /* বডি স্বচ্ছ থাকবে যাতে ক্যানভাস দেখা যায় */
+    color: #fff;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* পুরো পেজের মূল ব্যাকগ্রাউন্ড ক্যানভাসে কালো রঙ সেট করা হলো */
+#bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background-color: #030408; /* ক্যানভাসের নিজস্ব ব্যাকগ্রাউন্ড কালো/ডার্ক থাকবে */
+}
+
+.card, header, footer {
+    background: rgba(3, 4, 8, 0.85); /* সামান্য স্বচ্ছ ডার্ক ব্যাকগ্রাউন্ড */
+    border: 1px solid #00ff6633;
+}
     </style>
 </head>
 <body>
 
+    <canvas id="bgCanvas"></canvas>
     <!-- কাস্টম মেমোজি কার্সার -->
     <div class="cursor" id="cursor"></div>
 
@@ -271,10 +296,36 @@
         </div>
     </section>
 
+    <section class="hero">
+        <div class="terminal-box">
+            <div class="terminal-header">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <h1>Hi, I'm <span>[MD MASUD IQBAL]</span></h1>
+            <p>> Security Researcher & Bug Bounty Hunter.<br>> Breaking systems legally to make the digital world safer.</p>
+            <a href="#contact" class="btn hover-target">./init_contact.sh</a>
+        </div>
+    </section>
+
     <section id="about" class="section">
         <h2>// About Me</h2>
         <div class="card">
-            <p>আমি একজন প্যাশনেট পেনটেস্টার এবং এথিক্যাল হ্যাকার। ওয়েব অ্যাপ্লিকেশন সিকিউরিটি, নেটওয়ার্ক পেনিট্রেশন টেস্টিং এবং ভালনারেবিলিটি অ্যাসেসমেন্ট নিয়ে কাজ করি।</p>
+            <p>> root@MasudIqbal:~# cat profile.txt</p>
+            <p style="margin-top: 10px; color: #a0aec0;">
+                Hello! I am <strong>XXXX</strong>, an enthusiastic Penetration Tester and Bug Bounty Hunter. 
+                I actively hunt for security vulnerabilities across global platforms like <strong>HackerOne</strong>, <strong>Bugcrowd</strong>, and <strong>zerodaytest</strong>.
+            </p>
+            <p style="margin-top: 15px; color: #22c55e;">
+                > Weaponry / Arsenal (Tools):
+            </p>
+            <p style="color: #a0aec0;">
+                Nmap, Metasploit, Dirbuster, Hydra, Wireshark, Hashcat
+            </p>
+            <p style="margin-top: 15px; color: #a0aec0;">
+                My mission is to secure cyberspace by identifying critical security flaws before malicious hackers can exploit them.
+            </p>
         </div>
     </section>
 
@@ -311,10 +362,20 @@
     </section>
 
     <section id="contact" class="section">
-        <h2>// Secure Drop / Contact</h2>
+        <h2>// Contact & Profiles</h2>
         <div class="card">
-            <p>Direct Email: <span style="color: #00ff66;">your.email@sec-domain.com</span></p>
-            <p style="margin-top: 10px;">PGP Fingerprint available upon request for encrypted communication.</p>
+            <p>> root@contact:~# ./list_social_links.sh</p>
+            <p style="margin-top: 10px; color: #a0aec0;">
+                Feel free to connect or review my security research profiles:
+            </p>
+            
+            <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                <p>> <strong>HackerOne:</strong> <a href="YOUR_HACKERONE_URL" target="_blank" style="color: #22c55e; text-decoration: none;">hackerone.com/your_username</a></p>
+                <p>> <strong>Bugcrowd:</strong> <a href="YOUR_BUGCROWD_URL" target="_blank" style="color: #22c55e; text-decoration: none;">bugcrowd.com/your_username</a></p>
+                <p>> <strong>Zerodaytest:</strong> <a href="YOUR_ZERODAYTEST_URL" target="_blank" style="color: #22c55e; text-decoration: none;">zerodaytest.com/your_username</a></p>
+                <p>> <strong>GitHub:</strong> <a href="https://github.com/hack2bit" target="_blank" style="color: #22c55e; text-decoration: none;">github.com/hack2bit</a></p>
+                <p>> <strong>Telegram:</strong> <a href="https://t.me/YOUR_TELEGRAM_USERNAME" target="_blank" style="color: #22c55e; text-decoration: none;">t.me/your_username</a></p>
+            </div>
         </div>
     </section>
 
@@ -324,6 +385,10 @@
 
     <!-- কার্সার মুভমেন্ট স্ক্রিপ্ট -->
     <script>
+        
+        // ==========================================
+        // ১. কাস্টম কার্সার মুভমেন্ট ও ইন্টারঅ্যাকশন
+        // ==========================================
         const cursor = document.getElementById('cursor');
         
         window.addEventListener('mousemove', (e) => {
@@ -340,6 +405,76 @@
                 cursor.classList.remove('cursor-lock');
             });
         });
+
+        // ==========================================
+        // ২. ব্যাকগ্রাউন্ড ম্যাট্রিক্স বাইনারি রেইন অ্যানিমেশন
+        // ==========================================
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // হ্যাকিং স্টাইল ক্যারেক্টার ও টেক্সট সেট
+        const characters = '010101010101ABCDEF0123456789SYSTEM_ACCESS_ROOT_EXPLOIT_';
+        const fontSize = 14;
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = Array(columns).fill(1);
+
+        // মাঝে মাঝে ভেসে ওঠা গ্লিচ মেসেজ
+        const overlayTexts = [
+            "SYSTEM ACCESSED", 
+            "HACKED SUCCESS", 
+            "ACCESS GRANTED", 
+            "ROOT@SECURED", 
+            "VULNERABILITY FOUND"
+        ];
+        let currentOverlayText = "";
+        let overlayTimer = 0;
+
+        function drawMatrix() {
+            // ট্রেইল এফেক্টের জন্য হালকা কালো ব্যাকগ্রাউন্ড
+            ctx.fillStyle = 'rgba(3, 4, 8, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#22c55e'; // নিওন গ্রিন কালার
+            ctx.font = fontSize + 'px monospace';
+
+            // ড্রপস বা বাইনারি রেইন লুপ
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+
+            // র্যান্ডম গ্লিচ পপ-আপ টেক্সট হ্যান্ডেলিং
+            overlayTimer++;
+            if (overlayTimer % 250 === 0) {
+                currentOverlayText = overlayTexts[Math.floor(Math.random() * overlayTexts.length)];
+            }
+
+            if (currentOverlayText && (overlayTimer % 250 < 50)) {
+                ctx.save();
+                ctx.font = 'bold 22px monospace';
+                ctx.fillStyle = 'rgba(34, 197, 94, 0.2)';
+                ctx.shadowColor = '#22c55e';
+                ctx.shadowBlur = 12;
+                ctx.fillText(`[root@terminal ~]# ${currentOverlayText}`, canvas.width / 5, canvas.height / 2);
+                ctx.restore();
+            }
+        }
+
+        // অ্যানিমেশন ফ্রেম কল করা
+        setInterval(drawMatrix, 35);
     </script>
 
 </body>
